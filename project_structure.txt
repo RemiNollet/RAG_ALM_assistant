@@ -1,0 +1,105 @@
+rag-alm-assistant/
+├─ README.md
+├─ LICENSE
+├─ .gitignore
+├─ pyproject.toml              # ou requirements.txt + setup.cfg si tu veux rester simple
+├─ docker/
+│  ├─ api.Dockerfile           # container du service d'API/chat
+│  ├─ worker.Dockerfile        # container du pipeline d'indexation / batch
+│  └─ compose.example.yml      # exemple de docker-compose on-prem (API + vectordb locale)
+│
+├─ config/
+│  ├─ settings.example.yaml    # chemins des données, choix du modèle, paramètres RAG
+│  ├─ logging.yaml             # config logging structurée (JSON logs pour prod)
+│  └─ secrets.example.env      # variables sensitives à copier en local (.env pas commité)
+│
+├─ data/
+│  ├─ raw/                     # DIC PDF / docs bruts fournis par l'ALM  (NON versionné git)
+│  ├─ processed/               # chunks nettoyés + métadonnées (NON versionné git)
+│  ├─ vector_store/            # FAISS / ChromaDB persisted index (NON versionné git)
+│  └─ eval/                    # dataset d'évaluation
+│     ├─ corpus.json
+│     ├─ queries.json
+│     ├─ relevant_docs.json
+│     ├─ answers.json
+│     └─ errors.json
+│
+├─ src/
+│  ├─ rag_alm_assistant/
+│  │  ├─ __init__.py
+│  │
+│  │  ├─ ingestion/            # pipeline d'indexation des DIC
+│  │  │  ├─ pdf_loader.py      # extraction texte / metadata depuis les DIC
+│  │  │  ├─ chunker.py         # découpe intelligente en chunks
+│  │  │  ├─ embedder.py        # génération d'embeddings (modèle local)
+│  │  │  ├─ vectordb_client.py # interface FAISS/ChromaDB (write + read)
+│  │  │  └─ build_index.py     # script end-to-end: raw -> processed -> vector_store
+│  │
+│  │  ├─ retrieval/
+│  │  │  ├─ retriever.py       # top-k retrieval dans la base vectorielle
+│  │  │  ├─ reranker.py        # rerank facultatif (BM25 / cross-encoder local)
+│  │  │  └─ context_builder.py # assemble les passages (+ metadata pour citations)
+│  │
+│  │  ├─ generation/
+│  │  │  ├─ llm_interface.py   # wrapper modèle open weights (Mistral, Llama en local)
+│  │  │  ├─ prompt_builder.py  # formatage prompt RAG (consigne + contexte + question)
+│  │  │  └─ answer_postproc.py # nettoyage, ajout des sources citées
+│  │
+│  │  ├─ conversation/
+│  │  │  ├─ memory.py          # stockage historique conversation (short-term memory)
+│  │  │  ├─ session_manager.py # gestion des sessions utilisateur (id de session ALM)
+│  │  │  └─ orchestrator.py    # pipeline complet: question -> retrieve -> generate
+│  │
+│  │  ├─ evaluation/
+│  │  │  ├─ evaluator.py       # calcule F1 + BERTScore sur le dataset
+│  │  │  ├─ metrics.py         # implémentations métriques (precision, recall, f1)
+│  │  │  └─ run_eval.py        # script pour lancer l'éval et sortir un rapport
+│  │
+│  │  ├─ api/
+│  │  │  ├─ server.py          # FastAPI / Flask : endpoints `/chat`, `/health`, `/eval`
+│  │  │  ├─ schemas.py         # Pydantic models (ChatRequest, ChatResponse, SourceRef...)
+│  │  │  └─ auth.py            # auth interne SI (token interne / IP allowlist, etc)
+│  │
+│  │  ├─ utils/
+│  │  │  ├─ config.py          # lecture config/settings.yaml + variables d'env
+│  │  │  ├─ logger.py          # logger structuré, utilisé partout
+│  │  │  └─ text_cleaning.py   # fonctions génériques de nettoyage texte
+│  │
+│  │  └─ constants.py          # constantes globales (taille chunks par défaut etc.)
+│  │
+│  └─ scripts/
+│     ├─ index_corpus.py       # CLI: lance l’ingestion sur un dossier de DIC
+│     ├─ query_cli.py          # petit outil en ligne de commande pour tester le RAG
+│     └─ benchmark.py          # lance run_eval.py + export du rapport métrique
+│
+├─ tests/
+│  ├─ unit/
+│  │  ├─ test_chunker.py
+│  │  ├─ test_retriever.py
+│  │  ├─ test_prompt_builder.py
+│  │  ├─ test_answer_postproc.py
+│  │  └─ test_metrics.py
+│  ├─ integration/
+│  │  ├─ test_full_rag_pipeline.py   # question -> retrieve -> generate
+│  │  └─ test_api_endpoints.py       # /chat retourne bien réponse + sources
+│  └─ resources/
+│     ├─ sample_dic.pdf             # mini DIC fictif non-sensible pour les tests
+│     └─ sample_eval.json           # mini dataset jouet pour CI
+│
+├─ notebooks/
+│  ├─ 01_chunking_exploration.ipynb   # tuning chunk_size, chunk_overlap
+│  ├─ 02_embedding_quality.ipynb      # choix du modèle d'embedding
+│  ├─ 03_eval_analysis.ipynb          # analyse d'erreurs à partir de errors.json
+│  └─ 04_prompt_engineering.ipynb     # itérations sur le prompt du LLM
+│
+├─ docs/
+│  ├─ architecture.md          # schéma RAG end-to-end, flux de données
+│  ├─ api_contract.md          # spec des endpoints pour l'équipe ALM
+│  ├─ security.md              # conformité “on-prem / pas de cloud public”
+│  ├─ eval_protocol.md         # comment on calcule et interprète le F1 BERTScore
+│  └─ runbook.md               # comment lancer / redéployer en prod interne
+│
+└─ ci_cd/
+   ├─ pytest.yml               # pipeline d'intégration (tests unitaires/intégration)
+   ├─ lint.yml                 # black/ruff/mypy
+   └─ build_images.yml         # build Docker images pour l'environnement on-prem

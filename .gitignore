@@ -1,0 +1,143 @@
+# =======================================
+# Base Python
+# =======================================
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+*.pkl
+*.log
+*.egg-info/
+*.ipynb_checkpoints/
+.DS_Store
+
+# Environnements virtuels
+.env
+.venv/
+venv/
+env/
+ENV/
+
+# Fichiers de configuration sensibles
+config/secrets*.env
+config/*.yaml
+!config/settings.example.yaml   # garde un exemple propre
+!config/secrets.example.env
+
+# =======================================
+# Données & modèles
+# =======================================
+data/raw/
+data/processed/
+data/vector_store/
+data/tmp/
+data/cache/
+data/outputs/
+data/*.parquet
+data/*.csv
+data/*.tsv
+data/*.pkl
+data/*.npy
+data/*.npz
+
+# datasets d’évaluation anonymisés autorisés
+!data/eval/
+
+# Modèles et embeddings lourds
+models/
+checkpoints/
+embeddings/
+*.bin
+*.pt
+*.ckpt
+*.onnx
+*.h5
+*.tflite
+*.safetensors
+
+# =======================================
+# Logs, rapports & artefacts
+# =======================================
+logs/
+*.log
+reports/
+runs/
+wandb/
+mlruns/
+tensorboard/
+tmp/
+outputs/
+.cache/
+.cache_dir/
+__outputs__/
+
+# =======================================
+# Notebooks et artefacts d'exploration
+# =======================================
+notebooks/.ipynb_checkpoints/
+notebooks/tmp/
+notebooks/outputs/
+*.nbconvert.ipynb
+*.nb.html
+
+# =======================================
+# IDE & Outils
+# =======================================
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*.swn
+*.bak
+
+# =======================================
+# Docker & Build
+# =======================================
+docker/*.env
+docker/*.log
+docker/tmp/
+docker/volumes/
+*.pid
+*.tar
+*.bak
+build/
+dist/
+*.lock
+*.db
+*.sqlite3
+*.sqlite
+*.pid
+
+# =======================================
+# CI/CD
+# =======================================
+ci_cd/.secrets/
+ci_cd/tmp/
+coverage/
+.coverage
+htmlcov/
+pytest_cache/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# =======================================
+# Documentation générée
+# =======================================
+docs/_build/
+docs/build/
+docs/html/
+*.pdf
+
+# =======================================
+# OS spécifiques
+# =======================================
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+.DS_Store

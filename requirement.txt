@@ -1,0 +1,7 @@
+fastapi
+pydantic
+transformers
+PyPDF
+LlamaIndex
+torch
+accelerate
