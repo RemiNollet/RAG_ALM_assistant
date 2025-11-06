@@ -28,18 +28,8 @@ config/*.yaml
 # =======================================
 # Données & modèles
 # =======================================
-data/raw/
-data/processed/
-data/vector_store/
-data/tmp/
-data/cache/
-data/outputs/
-data/*.parquet
-data/*.csv
-data/*.tsv
-data/*.pkl
-data/*.npy
-data/*.npz
+data/
+
 
 # datasets d’évaluation anonymisés autorisés
 !data/eval/

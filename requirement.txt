@@ -1,7 +1,10 @@
 fastapi
 pydantic
 transformers
-PyPDF
-LlamaIndex
 torch
 accelerate
+PyPDF==6.1.3
+langchain-chroma==0.1.4
+langchain-community 
+pypdf 
+lark==1.2.2
