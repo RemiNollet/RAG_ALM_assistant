@@ -18,6 +18,9 @@ from .constants import (
     CHUNK_OVERLAP,
 )
 
+from .utils.logger import get_logger
+logger = get_logger(__name__)
+
 
 def load_dic_documents(dic_dir: str = DIC_DIR) -> List[Document]:
     """
@@ -41,7 +44,7 @@ def load_dic_documents(dic_dir: str = DIC_DIR) -> List[Document]:
 
             documents.extend(pages)
         except Exception as e:
-            print(f"[WARNING] Error while loading '{file_path}': {e}")
+            logger.info(f"[WARNING] Error while loading '{file_path}': {e}")
 
     return documents
 
@@ -62,7 +65,7 @@ def chunk_documents(
     )
 
     chunks = text_splitter.split_documents(documents)
-    print(f"{len(chunks)} chunks created from {len(documents)} documents.")
+    logger.info(f"{len(chunks)} chunks created from {len(documents)} documents.")
     return chunks
 
 
@@ -90,7 +93,7 @@ def build_vectorstore(
         persist_directory=persist_directory,
     )
 
-    print(f"Vector store built and persisted at: {persist_directory}")
+    logger.info(f"Vector store built and persisted at: {persist_directory}")
     return vector_store
 
 
@@ -107,13 +110,13 @@ def full_ingestion_pipeline(
 
     Returns: (vector_store, raw_documents, chunked_documents)
     """
-    print(f"[INGESTION] Loading DIC documents from: {dic_dir}")
+    logger.info(f"[INGESTION] Loading DIC documents from: {dic_dir}")
     raw_docs = load_dic_documents(dic_dir)
 
-    print("[INGESTION] Chunking documents...")
+    logger.info("[INGESTION] Chunking documents...")
     chunks = chunk_documents(raw_docs)
 
-    print("[INGESTION] Building vector store...")
+    logger.info("[INGESTION] Building vector store...")
     vector_store = build_vectorstore(chunks, persist_directory=persist_directory, model_name=model_name)
 
     return vector_store, raw_docs, chunks
