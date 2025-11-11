@@ -1,4 +1,4 @@
-# RAG ALM Assistant
+# RAG ALM Assistant (In progress, delivery on November 13th)
 
 A **Retrieval-Augmented Generation (RAG)** chatbot assistant designed for the **Asset-Liability Management (ALM)** department of a life insurance company.
 
@@ -9,7 +9,7 @@ Help ALM teams instantly access and reason over information contained in **Key I
 - **src/** – Core RAG logic (ingestion, retrieval, generation, evaluation, API)
 - **data/** – Local datasets (not versioned except data/eval)
 - **notebooks/** – Research & exploration notebooks
-- **docker/** – Container setup for on-prem deployment
+- **docker/** – Container setup for on-prem deployment (In progress)
 
 ## Quick start
 \`\`\`bash
