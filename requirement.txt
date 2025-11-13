@@ -7,7 +7,7 @@ scikit-learn==1.3.2
 sentence-transformers==2.7.0
 
 # HF / LLM
-transformers==4.46.3
+transformers==4.44.2
 torch==2.9.0
 accelerate==1.11.0
 huggingface-hub>=0.24,<0.26
@@ -21,7 +21,9 @@ chromadb==0.5.18
 
 # API & utils
 fastapi==0.121.1
-pydantic==2.12.4
+typing_extensions==4.12.2
+pydantic==2.8.2
+pydantic-core==2.20.1
 uvicorn[standard]==0.32.0
 python-dotenv==1.0.1
 PyYAML==6.0.2
