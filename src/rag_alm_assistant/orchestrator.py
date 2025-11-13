@@ -11,7 +11,7 @@ Steps:
 from typing import Any, Dict, List, Optional
 
 from langchain_core.prompts import PromptTemplate
-from langchain.memory import ConversationBufferMemory
+from langchain_community.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_core.documents import Document
 
@@ -25,14 +25,16 @@ class RAGOrchestrator:
         retriever=None,
         llm=None,
         memory = None,
-        k: int = 5,
+        k: int = 10,
+        k_rerank: int = 5,
+        use_reranker: bool = False
     ):
         """
         If retriever/llm/memory are not provided, they are built using helpers.
         One orchestrator instance = one conversation memory.
         """
         if retriever is None:
-            retriever, _ = get_retriever(k=k)
+            retriever, _ = get_retriever(k=k, use_reranker=use_reranker, rerank_top_k=k_rerank)
         if llm is None:
             llm = get_llm()
         if memory is None:
@@ -108,7 +110,7 @@ class RAGOrchestrator:
         - runs the qa_chain
         - returns (answer, sources)
         """
-        result = self.qa_chain({"question": question})
+        result = self.qa_chain.invoke({"question": question})
         answer = result["answer"]
         source_docs = result["source_documents"]
         sources = self.format_sources(source_docs)
