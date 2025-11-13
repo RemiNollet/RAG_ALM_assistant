@@ -121,7 +121,17 @@ class RAGOrchestrator:
         - runs the qa_chain
         - returns (answer, sources)
         """
-        result = self.qa_chain.invoke({"question": question})
+        # CASE 1: memory enabled → standard call
+        if self.use_memory:
+            result = self.qa_chain.invoke({"question": question})
+
+        # CASE 2: memory disabled → must pass BOTH keys
+        else:
+            result = self.qa_chain.invoke({
+                "question": question,
+                "chat_history": []    # prevents Missing input keys
+            })
+            
         answer = result["answer"]
         source_docs = result["source_documents"]
         sources = self.format_sources(source_docs)
