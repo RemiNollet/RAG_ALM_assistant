@@ -4,6 +4,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.vectorstores import VectorStoreRetriever
 from chromadb.config import Settings
+from langchain_core.retrievers import BaseRetriever 
 
 from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE
 

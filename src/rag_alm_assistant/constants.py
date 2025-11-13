@@ -19,7 +19,7 @@ CHUNK_OVERLAP = 60
 
 # LLM
 LLM_MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"
-LLM_MAX_NEW_TOKENS = 4096
+LLM_MAX_NEW_TOKENS = 1024
 LLM_DO_TOKENS = False
 
 load_dotenv()

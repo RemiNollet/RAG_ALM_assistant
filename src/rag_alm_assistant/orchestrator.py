@@ -11,7 +11,7 @@ Steps:
 from typing import Any, Dict, List, Optional
 
 from langchain_core.prompts import PromptTemplate
-from langchain_community.memory import ConversationBufferMemory
+from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_core.documents import Document
 
@@ -27,25 +27,32 @@ class RAGOrchestrator:
         memory = None,
         k: int = 10,
         k_rerank: int = 5,
-        use_reranker: bool = False
+        use_reranker: bool = False,
+        use_memory: bool = True
     ):
         """
         If retriever/llm/memory are not provided, they are built using helpers.
         One orchestrator instance = one conversation memory.
         """
+        self.use_memory = use_memory
+        
         if retriever is None:
             retriever, _ = get_retriever(k=k, use_reranker=use_reranker, rerank_top_k=k_rerank)
         if llm is None:
             llm = get_llm()
-        if memory is None:
-            memory = self._build_memory()
 
         self.retriever = retriever
         self.llm = llm
-        self.memory = memory
+
+        # --- Memory handling ---
+        if use_memory:
+            self.memory = memory or self._build_memory()
+        else:
+            self.memory = None   # critical: disables chat_history requirement
 
         self.prompt = self._build_prompt()
         self.qa_chain = self._create_qa_chain()
+
 
     def _build_prompt(self) -> PromptTemplate:
         """
@@ -77,13 +84,17 @@ class RAGOrchestrator:
         """
         Build the full RAG conversational chain (LLM + retriever + memory).
         """
-        return ConversationalRetrievalChain.from_llm(
+        common_kwargs = dict(
             llm=self.llm,
             retriever=self.retriever,
-            memory=self.memory,
             return_source_documents=True,
             combine_docs_chain_kwargs={"prompt": self.prompt},
         )
+
+        if self.memory is not None:
+            common_kwargs["memory"] = self.memory
+
+        return ConversationalRetrievalChain.from_llm(**common_kwargs)
 
     @staticmethod
     def format_sources(source_docs: List[Document]) -> List[Dict[str, Any]]:
