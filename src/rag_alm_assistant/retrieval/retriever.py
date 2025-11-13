@@ -32,14 +32,24 @@ def get_vector_store(
 def get_retriever(
     persist_directory: str = VECTORSTORE_DIR,
     model_name: str = EMBEDDING_MODEL_NAME,
-    k: int = 5,
-) -> Tuple[VectorStoreRetriever, Chroma]:
-    """
-    Convenience function: load Chroma and return a retriever.
-    """
+    k: int = 20,
+    use_reranker: bool = False,
+    rerank_top_k: int = 5,          # top-K after reranking
+    reranker_model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2",
+) -> Tuple[BaseRetriever, Chroma]:
     vector_store = get_vector_store(persist_directory=persist_directory, model_name=model_name)
-    retriever = vector_store.as_retriever(
+
+    base_retriever: VectorStoreRetriever = vector_store.as_retriever(
         search_type="similarity",
         search_kwargs={"k": k},
     )
-    return retriever, vector_store
+
+    if not use_reranker:
+        return base_retriever, vector_store
+
+    rerank_retriever = RerankRetriever(
+        vector_retriever=base_retriever,
+        model_name=reranker_model_name,
+        top_k=rerank_top_k,
+    )
+    return rerank_retriever, vector_store
