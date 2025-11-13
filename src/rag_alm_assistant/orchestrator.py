@@ -18,6 +18,8 @@ from langchain_core.documents import Document
 from .llm import get_llm
 from .retrieval.retriever import get_retriever
 
+from .utils.logger import get_logger
+logger = get_logger(__name__)
 
 class RAGOrchestrator:
     def __init__(
@@ -123,10 +125,12 @@ class RAGOrchestrator:
         """
         # CASE 1: memory enabled → standard call
         if self.use_memory:
+            logger.info("Generate answer with memory for question: {}".format(question))
             result = self.qa_chain.invoke({"question": question})
 
         # CASE 2: memory disabled → must pass BOTH keys
         else:
+            logger.info("Generate answer with memory for question: {}".format(question))
             result = self.qa_chain.invoke({
                 "question": question,
                 "chat_history": []    # prevents Missing input keys
