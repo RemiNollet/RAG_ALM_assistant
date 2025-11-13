@@ -2,6 +2,7 @@ import glob
 import os
 from pathlib import Path
 from typing import List, Tuple
+from chromadb.config import Settings
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
@@ -87,10 +88,15 @@ def build_vectorstore(
     """
     embeddings = build_embeddings(model_name=model_name)
 
+    client_settings = Settings(
+        anonymized_telemetry=False,  # <- important
+    )
+
     vector_store = Chroma.from_documents(
         documents=docs,
         embedding=embeddings,
         persist_directory=persist_directory,
+        client_settings=client_settings,   # <- désactive la télémétrie
     )
 
     logger.info(f"Vector store built and persisted at: {persist_directory}")

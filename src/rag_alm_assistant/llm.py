@@ -1,4 +1,5 @@
 from functools import lru_cache
+import torch
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline, AutoConfig, BitsAndBytesConfig
 from langchain_community.llms import HuggingFacePipeline

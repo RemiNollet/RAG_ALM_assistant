@@ -3,6 +3,7 @@ from typing import Tuple
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.vectorstores import VectorStoreRetriever
+from chromadb.config import Settings
 
 from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE
 
@@ -17,10 +18,14 @@ def get_vector_store(
     encode_kwargs = {"normalize_embeddings": EMBEDDING_NORMALIZE}
     embeddings = HuggingFaceEmbeddings(model_name=model_name, encode_kwargs=encode_kwargs)
 
+    client_settings = Settings(anonymized_telemetry=False)
+
     vector_store = Chroma(
         persist_directory=persist_directory,
         embedding_function=embeddings,
+        client_settings=client_settings,   # <- désactive la télémétrie
     )
+    
     return vector_store
 
 
