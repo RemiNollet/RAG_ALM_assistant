@@ -17,8 +17,8 @@ EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"
 EMBEDDING_NORMALIZE = True
 
 # Chunking
-CHUNK_SIZE = 600
-CHUNK_OVERLAP = 60
+CHUNK_SIZE = 2000
+CHUNK_OVERLAP = 200
 
 # LLM
 LLM_MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"
@@ -27,3 +27,6 @@ LLM_DO_TOKENS = False
 
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
+
+# reranker
+RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"

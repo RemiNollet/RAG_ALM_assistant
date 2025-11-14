@@ -7,7 +7,7 @@ from langchain_core.documents import Document
 from pydantic import PrivateAttr
 from sentence_transformers import CrossEncoder
 
-
+from ..constants import RERANKER_MODEL_NAME
 class RerankRetriever(BaseRetriever):
     """
     Retriever qui wrappe un retriever existant (ex: Chroma)
@@ -23,8 +23,8 @@ class RerankRetriever(BaseRetriever):
     """
 
     vector_retriever: BaseRetriever
-    model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    top_k: int = 5
+    model_name: str = RERANKER_MODEL_NAME
+    top_k: int
 
     _cross_encoder: CrossEncoder = PrivateAttr()
 
@@ -35,7 +35,7 @@ class RerankRetriever(BaseRetriever):
 
     def _get_relevant_documents(self, query: str) -> List[Document]:
         # 1) récupération brute depuis Chroma (top-K large)
-        docs = self.vector_retriever.get_relevant_documents(query)
+        docs = self.vector_retriever.invoke(query)
         if not docs:
             return []
 

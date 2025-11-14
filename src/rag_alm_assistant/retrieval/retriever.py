@@ -7,8 +7,9 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from chromadb.config import Settings
 from langchain_core.retrievers import BaseRetriever 
 
-from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE, DIC_DIR
+from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE, DIC_DIR, RERANKER_MODEL_NAME
 from ..ingestion import full_ingestion_pipeline
+from .reranker import RerankRetriever
 
 
 def get_vector_store(
@@ -41,10 +42,10 @@ def get_vector_store(
 def get_retriever(
     persist_directory: str = VECTORSTORE_DIR,
     model_name: str = EMBEDDING_MODEL_NAME,
-    k: int = 20,
-    use_reranker: bool = False,
-    rerank_top_k: int = 5,          # top-K after reranking
-    reranker_model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    k: int = 5,
+    use_reranker: bool = True,
+    rerank_top_k: int = 2,          # top-K after reranking
+    reranker_model_name: str = RERANKER_MODEL_NAME
 ) -> Tuple[BaseRetriever, Chroma]:
     vector_store = get_vector_store(persist_directory=persist_directory, model_name=model_name)
 
