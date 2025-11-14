@@ -27,7 +27,7 @@ class RAGOrchestrator:
         retriever=None,
         llm=None,
         memory = None,
-        k: int = 3,
+        k: int = 4,
         k_rerank: int = 1,
         use_reranker: bool = True,
         use_memory: bool = True

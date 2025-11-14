@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 from langchain_core.language_models.llms import LLM
 from langchain_core.callbacks import CallbackManagerForLLMRun
 
-from .constants import LLM_MODEL_ID, LLM_MAX_NEW_TOKENS, LLM_DO_TOKENS, HF_TOKEN
+from .constants import LLM_MODEL_ID, LLM_MAX_NEW_TOKENS, LLM_DO_TOKENS, HF_TOKEN, RETURN_FULL_TEXT
 
 
 class MistralLLM(LLM):
@@ -16,6 +16,7 @@ class MistralLLM(LLM):
     tokenizer: Any
     max_new_tokens: int = LLM_MAX_NEW_TOKENS
     do_sample: bool = LLM_DO_TOKENS
+    return_full_text: bool = RETURN_FULL_TEXT
 
     class Config:
         arbitrary_types_allowed = True
@@ -92,5 +93,8 @@ def get_llm(model_id: str = LLM_MODEL_ID) -> MistralLLM:
         tokenizer=tokenizer,
         max_new_tokens=LLM_MAX_NEW_TOKENS,
         do_sample=LLM_DO_TOKENS,
+        temperature=0.0,
+        top_p=1.0,
+        return_full_text=RETURN_FULL_TEXT ## Très important ! On ne veut pas le prompt initial
     )
     return llm
