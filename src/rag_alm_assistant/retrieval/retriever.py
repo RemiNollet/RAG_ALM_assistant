@@ -14,17 +14,22 @@ def get_vector_store(
     model_name: str = EMBEDDING_MODEL_NAME,
 ) -> Chroma:
     """
-    Load an existing Chroma vector store from disk.
+    Load an existing Chroma vector store from disk or create it if doent exist.
     """
     encode_kwargs = {"normalize_embeddings": EMBEDDING_NORMALIZE}
     embeddings = HuggingFaceEmbeddings(model_name=model_name, encode_kwargs=encode_kwargs)
-
-    client_settings = Settings(anonymized_telemetry=False)
-
+    
+    if not persist_path.exists() or not any(persist_path.iterdir()):
+        # base absente → on lance ingestion
+        full_ingestion_pipeline(
+            dic_dir=DIC_DIR,
+            persist_directory=persist_directory,
+            model_name=model_name,
+        )
+        
     vector_store = Chroma(
         persist_directory=persist_directory,
-        embedding_function=embeddings,
-        client_settings=client_settings,   # <- désactive la télémétrie
+        embedding_function=embeddings
     )
     
     return vector_store

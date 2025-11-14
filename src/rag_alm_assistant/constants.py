@@ -6,8 +6,9 @@ import os
 from dotenv import load_dotenv
 
 # Data paths
-DIC_DIR = os.path.join(os.path.expanduser("~/RAG_ALM_assistant"), "data/DIC")
-VECTORSTORE_DIR = os.path.join(os.path.expanduser("~/RAG_ALM_assistant"), "data/vector_store")
+BASE_DIR = Path(__file__).resolve().parents[2]
+DATA_DIR = BASE_DIR / "data"
+VECTORSTORE_DIR = str(DATA_DIR / "vector_store")
 
 # Embeddings
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"

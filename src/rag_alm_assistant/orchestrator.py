@@ -61,14 +61,16 @@ class RAGOrchestrator:
         Build the RAG prompt template used by the ConversationalRetrievalChain.
         """
         return PromptTemplate.from_template(
-            "You are an assistant for question-answer tasks. "
-            "Use the following pieces of retrieved context to answer the question. "
-            "If you don't know the answer, just say that you don't know. "
-            "Use three sentences maximum and keep the answer concise.\n\n"
-            "Chat history:\n{chat_history}\n\n"
-            "Context:\n{context}\n\n"
-            "Question: {question}\n\n"
-            "Answer:"
+            "Tu es un assistant financier qui répond à des questions sur des documents DIC/KID "
+            "rédigés en français.\n"
+            "Utilise UNIQUEMENT le contexte fourni pour répondre.\n"
+            "Si tu ne sais pas, dis explicitement « Je ne sais pas ».\n\n"
+            "IMPORTANT : Réponds en français, de façon claire et professionnelle, "
+            "en 1 a 3 phrases si nécessaire.\n\n"
+            "Historique de conversation :\n{chat_history}\n\n"
+            "Contexte :\n{context}\n\n"
+            "Question : {question}\n\n"
+            "Réponse :"
         )
 
     def _build_memory(self) -> ConversationBufferMemory:
@@ -130,7 +132,7 @@ class RAGOrchestrator:
 
         # CASE 2: memory disabled → must pass BOTH keys
         else:
-            logger.info("Generate answer with memory for question: {}".format(question))
+            logger.info("Generate answer without memory for question: {}".format(question))
             result = self.qa_chain.invoke({
                 "question": question,
                 "chat_history": []    # prevents Missing input keys
