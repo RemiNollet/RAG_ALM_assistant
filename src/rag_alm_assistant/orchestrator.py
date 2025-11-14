@@ -27,9 +27,9 @@ class RAGOrchestrator:
         retriever=None,
         llm=None,
         memory = None,
-        k: int = 10,
-        k_rerank: int = 5,
-        use_reranker: bool = False,
+        k: int = 5,
+        k_rerank: int = 2,
+        use_reranker: bool = True,
         use_memory: bool = True
     ):
         """
@@ -65,6 +65,7 @@ class RAGOrchestrator:
             "rédigés en français.\n"
             "Utilise UNIQUEMENT le contexte fourni pour répondre.\n"
             "Si tu ne sais pas, dis explicitement « Je ne sais pas ».\n\n"
+            "NE PAS inventer, NE répondre qu’à partir des documents, NE PAS extrapoler, Réponse strictement littérale et factuelle\n"
             "IMPORTANT : Réponds en français, de façon claire et professionnelle, "
             "en 1 a 3 phrases si nécessaire.\n\n"
             "Historique de conversation :\n{chat_history}\n\n"

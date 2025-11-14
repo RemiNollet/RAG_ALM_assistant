@@ -1,4 +1,5 @@
 from typing import Tuple
+from pathlib import Path
 
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
@@ -6,7 +7,8 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from chromadb.config import Settings
 from langchain_core.retrievers import BaseRetriever 
 
-from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE
+from ..constants import VECTORSTORE_DIR, EMBEDDING_MODEL_NAME, EMBEDDING_NORMALIZE, DIC_DIR
+from ..ingestion import full_ingestion_pipeline
 
 
 def get_vector_store(
@@ -16,6 +18,7 @@ def get_vector_store(
     """
     Load an existing Chroma vector store from disk or create it if doent exist.
     """
+    persist_path = Path(persist_directory)
     encode_kwargs = {"normalize_embeddings": EMBEDDING_NORMALIZE}
     embeddings = HuggingFaceEmbeddings(model_name=model_name, encode_kwargs=encode_kwargs)
     
