@@ -15,7 +15,7 @@ app = FastAPI(
     version="0.1.0",
 )
 
-orc = RAGOrchestrator()
+orc = RAGOrchestrator(use_reranker = True, use_memory=True, k_rerank = 5, k = 10)
 
 class ChatRequest(BaseModel):
     question: str

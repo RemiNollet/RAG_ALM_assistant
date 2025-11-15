@@ -17,6 +17,7 @@ from langchain_core.documents import Document
 
 from .llm import get_llm
 from .retrieval.retriever import get_retriever
+from .constants import K, K_RERANK
 
 from .utils.logger import get_logger
 logger = get_logger(__name__)
@@ -27,8 +28,8 @@ class RAGOrchestrator:
         retriever=None,
         llm=None,
         memory = None,
-        k: int = 4,
-        k_rerank: int = 1,
+        k: int = K,
+        k_rerank: int = K_RERANK,
         use_reranker: bool = True,
         use_memory: bool = True
     ):

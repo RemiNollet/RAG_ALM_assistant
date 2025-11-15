@@ -60,7 +60,18 @@ def chunk_documents(
     Split documents into overlapping chunks using RecursiveCharacterTextSplitter.
     """
     text_splitter = RecursiveCharacterTextSplitter(
-        separators=["\n\n", "\n"],
+        separators=[
+            "\n\n",               # paragraphes
+            "\n",                 # lignes
+            ". ",                 # fin de phrase
+            "; ",                 # fin d'énoncé
+            ": ",                 # titres ou items
+            "? ",
+            "! ",
+            "• ", "- ", "· ",     # bullet points
+            "  ",                 # double espace
+            " "                   # fallback
+        ],
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         length_function=len,
@@ -76,7 +87,11 @@ def build_embeddings(model_name: str = EMBEDDING_MODEL_NAME) -> HuggingFaceEmbed
     Create a HuggingFaceEmbeddings instance with sensible defaults.
     """
     encode_kwargs = {"normalize_embeddings": EMBEDDING_NORMALIZE}
-    return HuggingFaceEmbeddings(model_name=model_name, encode_kwargs=encode_kwargs)
+    
+    return HuggingFaceEmbeddings(
+        model_name=model_name, 
+        encode_kwargs=encode_kwargs
+    )
 
 
 def build_vectorstore(

@@ -20,7 +20,7 @@ EMBEDDING_NORMALIZE = True
 
 # Chunking
 CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 100
+CHUNK_OVERLAP = 200
 
 # LLM
 LLM_MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"
@@ -34,3 +34,5 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 # reranker
 #RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 RERANKER_MODEL_NAME = "BAAI/bge-reranker-base"
+K = 10,
+K_RERANK = 5
