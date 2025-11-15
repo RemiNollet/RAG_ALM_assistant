@@ -144,3 +144,7 @@ class RAGOrchestrator:
         source_docs = result["source_documents"]
         sources = self.format_sources(source_docs)
         return answer, sources
+
+    def reset(self):
+        if self.memory:
+            self.memory.clear()

@@ -51,3 +51,8 @@ def chat(req: ChatRequest) -> ChatResponse:
     source_models = [SourceRef(**s) for s in sources]
     return ChatResponse(answer=answer, sources=source_models)
 
+@app.post("/reset")
+def reset_memory():
+    orc.reset()
+    return {"status": "memory_cleared"}
+
