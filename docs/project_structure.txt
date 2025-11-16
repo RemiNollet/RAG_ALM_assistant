@@ -1,0 +1,38 @@
+RAG_ALM_assistant
+│
+├── data/
+│   ├── DIC/                     # All PRIIPS DIC PDFs
+│   ├── vectorstore/             # Local ChromaDB persistent data
+│   └── eval/                    # Evaluation dataset (queries, answers...)
+│
+├── docs/               
+│   ├── project_structure.txt    # This file
+│   └── architecture_diagram.png # RAG architecture diagram
+│
+├── notebooks/
+│   ├── exploration.ipynb
+│   └── RAG_evaluation.ipynb
+│
+├── src/
+│   └── rag_alm_assistant/
+│       ├── orchestrator.py      # Main RAG orchestration logic
+│       ├── ingestion.py         # PDF parsing, chunking, embeddings
+│       ├── llm.py               # Local LLM loading (Mistral/Llama)
+│       ├── constants.py
+│       ├── utils/
+│       │    ├── logger.py
+│       └── retrieval/
+│            ├── retriever.py    # Vector store loading + retriever
+│            ├── reranker.py     # Optional cross-encoder reranker
+│
+├── tests/
+│   └── integration/
+         ├── test_full_rag_pipeline.py
+│   └── unit/
+│        ├── test_ingestion.py
+│        ├── test_retriever.py
+│        ├── test_orchestrator.py
+│
+├── requirements.txt
+├── Makefile
+└── README.md
