@@ -57,7 +57,7 @@ The following requirements must be respected:
 
 ---
 
-# Installation & Quick Start
+# Installation & Quick Start 
 
 Below is the complete setup, run, and evaluation workflow.
 
