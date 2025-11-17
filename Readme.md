@@ -29,7 +29,7 @@ All of this **without external services** (confidentiality), relying exclusively
 
 ## Project Architecture
 
-PNG diagram located in `docs/architecture_diagram.png`
+![diagram](docs/RAG_pipeline_architecture.png)
 
 ---
 
